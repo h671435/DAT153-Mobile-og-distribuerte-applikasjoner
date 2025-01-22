@@ -1,0 +1,67 @@
+# Android Studio specific files
+.idea/
+*.iml
+local.properties
+*.ipr
+
+# Gradle/Maven files
+.gradle/
+build/
+*.jks
+*.keystore
+
+# Logs
+*.log
+*.stacktrace
+
+# Build output
+*.apk
+*.aab
+
+# Tests
+**/build/
+
+# Generated files
+**/gen/
+**/build/generated/
+
+# Local configuration files
+*.jks
+*.keystore
+*.pfx
+
+# IntelliJ IDEA
+*.iws
+.DS_Store
+
+# Mobile
+.cxx/
+
+# Gradle wrapper
+gradle/wrapper/
+
+# Kotlin metadata
+*.kotlin_module
+
+# Module files
+.idea/modules.xml
+
+# User-specific stuff
+.gradle/caches/
+.classpath
+.project
+
+# ProGuard
+proguard-rules.pro
+
+# External native build
+.externalNativeBuild
+
+# Crashlytics
+crashlytics.properties
+
+# Firebase
+google-services.json
+
+# Other
+.DS_Store
