@@ -33,7 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding.buttonStartQuiz.setOnClickListener(v -> {
             Log.d("MainActivity", "Launching QuizActivity");
-            startActivity(new Intent(this, QuizStartActivity.class));
+            startActivity(new Intent(this, StartQuizActivity.class));
+        });
+
+        binding.buttonGallery.setOnClickListener(v -> {
+            Log.d("MainActivity", "Launching GalleryActivity");
+            startActivity(new Intent(this, GalleryActivity.class));
         });
     }
 }

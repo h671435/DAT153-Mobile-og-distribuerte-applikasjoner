@@ -33,14 +33,25 @@
             android:id="@+id/button_start_quiz"
             android:layout_width="wrap_content"
             android:layout_height="400dp"
+            android:backgroundTint="#DFCB2E"
             android:contentDescription="Start Quiz"
-            android:text="@string/start_quiz_tekst" />
+            android:text="@string/start_quiz_tekst"
+            android:textColor="#A02200" />
+
+        <Button
+            android:id="@+id/button_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#3573A3"
+            android:text="@string/gallery_button" />
 
         <RatingBar
             android:id="@+id/ratingBar"
             style="@android:style/Widget.RatingBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#8339BB1C" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
