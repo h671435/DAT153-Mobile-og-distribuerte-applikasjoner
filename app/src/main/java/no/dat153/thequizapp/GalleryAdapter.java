@@ -1,6 +1,7 @@
 package no.dat153.thequizapp;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     public void onBindViewHolder(@NonNull GalleryAdapter.MyViewHolder holder, int position) {
         // Gir verdier til hver verdi som kommer inn i viewet, basert på posisjonen i listen
         holder.textView.setText(bilder.get(position).getNavn());
-        holder.imageView.setImageResource(bilder.get(position).getBildeId());
+
+        Uri bildeUri = bilder.get(position).getBildeUri();
+
+        Glide.with(context)
+                .load(bildeUri) // Load image from Uri (works for both resources and external URIs)
+                .into(holder.imageView); // Set the loaded image into ImageView
     }
 
     @Override

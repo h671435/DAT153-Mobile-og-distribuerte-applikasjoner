@@ -1,16 +1,18 @@
 package no.dat153.thequizapp;
 
+import android.net.Uri;
+
 public class GalleryBilde {
-    private final int bildeId;
+    private final Uri bildeUri;
     private final String navn;
 
-    public GalleryBilde(int bildeId, String navn) {
-        this.bildeId = bildeId;
+    public GalleryBilde(Uri bildeUri, String navn) {
+        this.bildeUri = bildeUri;
         this.navn = navn;
     }
 
-    public int getBildeId() {
-        return bildeId;
+    public Uri getBildeUri() {
+        return bildeUri;
     }
 
     public String getNavn() {
