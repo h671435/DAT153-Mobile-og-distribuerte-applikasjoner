@@ -3,6 +3,7 @@ package no.dat153.thequizapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +11,7 @@ import android.text.InputType;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -23,19 +25,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.io.File;
+import java.util.HashMap;
 
 import android.os.Environment;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class GalleryActivity extends AppCompatActivity {
 
     ArrayList<GalleryBilde> bilder = new ArrayList<>();
     private Uri bildeUri;
-    private RecyclerView recyclerView;
+
     private GalleryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        RecyclerView recyclerView;
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_gallery);
@@ -47,19 +54,66 @@ public class GalleryActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.min_recycler_view);
 
-        setUpGalleryBilder();
+        loadSavedImages();
+        if (bilder.isEmpty()) {
+            setUpGalleryBilder();
+        }
 
         adapter = new GalleryAdapter(this, bilder);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.button_sort).setOnClickListener(v -> {
-            // Sort bilder by name
+            // Sorter bilder
             bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
+            adapter.notifyItemRangeChanged(0, bilder.size());
         });
 
         findViewById(R.id.button_add_image).setOnClickListener(addImage());
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveImages();
+    }
+
+
+    private void saveImages() {
+        SharedPreferences sharedPreferences = getSharedPreferences("BildeData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        ArrayList<HashMap<String, String>> bildeURIer = new ArrayList<>();
+        for (GalleryBilde bilde : bilder) {
+            HashMap<String, String> bildeData = new HashMap<>();
+            bildeData.put("uri", bilde.getBildeUri().toString());
+            bildeData.put("navn", bilde.getNavn().toString());
+            bildeURIer.add(bildeData);
+        }
+
+        editor.putString("bildeURIer", new Gson().toJson(bildeURIer));
+        editor.apply();
+    }
+
+    private void loadSavedImages() {
+        SharedPreferences sharedPreferences = getSharedPreferences("BildeData", MODE_PRIVATE);
+        String savedImagesJson = sharedPreferences.getString("bildeURIer", null);
+
+        if (savedImagesJson != null) {
+            ArrayList<HashMap<String, String>> bildeURIer = new Gson().fromJson(savedImagesJson, new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType());
+
+            if (bildeURIer != null) {
+                for (HashMap<String, String> bildeData : bildeURIer) {
+                    String uriString = bildeData.get("uri");
+                    String navn = bildeData.get("navn");
+
+                    bilder.add(new GalleryBilde(Uri.parse(uriString), navn));
+                }
+            }
+        }
+    }
+
+
 
     private void setUpGalleryBilder() {
         bilder.add(new GalleryBilde(getResourceUri(R.drawable.katt), "Katt"));
@@ -74,36 +128,16 @@ public class GalleryActivity extends AppCompatActivity {
 
 
     private View.OnClickListener addImage() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                visBildeValgDialog();
-            }
-        };
+        return v -> visBildeValgDialog();
     }
 
     private void visBildeValgDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Velg bilde kamera eller bilde mobil")
                 .setMessage("Velg en handling")
-                .setPositiveButton("Ta et bilde", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        openCamera();
-                    }
-                })
-                .setNegativeButton("Velg fra galleri", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        openBilder();
-                    }
-                })
-                .setNeutralButton("Avbryt", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setPositiveButton("Ta et bilde", (dialog, which) -> openCamera())
+                .setNegativeButton("Velg fra galleri", (dialog, which) -> openBilder())
+                .setNeutralButton("Avbryt", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -135,11 +169,10 @@ public class GalleryActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
                 leggVedNavnPaaBildeSomBlirTatt(bildeUri);
             }
-        }
+
     }
 
     private void leggVedNavnPaaBildeSomBlirTatt(Uri bildeUri) {

@@ -42,6 +42,9 @@ dependencies {
     implementation(libs.constraintlayout)
     // Glide dependency
     implementation(libs.glide)
+    // Gson
+    implementation(libs.gson)
+
     annotationProcessor(libs.compiler)
 
     testImplementation(libs.junit)
