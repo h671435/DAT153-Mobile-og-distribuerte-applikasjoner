@@ -65,25 +65,7 @@ public class GalleryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Sorter listen
-        findViewById(R.id.button_sort).setOnClickListener(v -> {
-            boolean isSorted = true;
-            for (int i = 0; i < bilder.size() - 1; i++) {
-                if (bilder.get(i).getNavn().compareTo(bilder.get(i + 1).getNavn()) > 0) {
-                    isSorted = false;
-                    break;
-                }
-            }
-
-            if (isSorted) {
-                bilder.sort((b1, b2) -> b2.getNavn().compareTo(b1.getNavn()));
-            } else {
-                bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
-            }
-
-            adapter.notifyItemRangeChanged(0, bilder.size());
-        });
-
-
+        findViewById(R.id.button_sort).setOnClickListener(v -> sorterBilder());
         findViewById(R.id.button_add_image).setOnClickListener(addImage());
     }
 
@@ -93,6 +75,23 @@ public class GalleryActivity extends AppCompatActivity {
         saveImages();
     }
 
+    private void sorterBilder() {
+        boolean isSorted = true;
+        for (int i = 0; i < bilder.size() - 1; i++) {
+            if (bilder.get(i).getNavn().compareTo(bilder.get(i + 1).getNavn()) > 0) {
+                isSorted = false;
+                break;
+            }
+        }
+
+        if (isSorted) {
+            bilder.sort((b1, b2) -> b2.getNavn().compareTo(b1.getNavn()));
+        } else {
+            bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
+        }
+
+        adapter.notifyItemRangeChanged(0, bilder.size());
+    }
 
     private void saveImages() {
         SharedPreferences sharedPreferences = getSharedPreferences("BildeData", MODE_PRIVATE);
@@ -183,12 +182,17 @@ public class GalleryActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 1) {
-            leggVedNavnPaaBildeSomBlirTatt(bildeUri);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) { // Camera
+                leggVedNavnPaaBildeSomBlirTatt(bildeUri);
+            } else if (requestCode == 2) { // Gallery
+                if (data != null) {
+                    Uri selectedImageUri = data.getData(); // Henter URI til valgt bilde
+                    leggVedNavnPaaBildeSomBlirTatt(selectedImageUri);
+                }
+            }
         }
-
     }
-
     private void leggVedNavnPaaBildeSomBlirTatt(Uri bildeUri) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Skriv inn hva du har tatt bilde av");
@@ -210,6 +214,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     private void openBilder() {
-
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, 2);
     }
 }
