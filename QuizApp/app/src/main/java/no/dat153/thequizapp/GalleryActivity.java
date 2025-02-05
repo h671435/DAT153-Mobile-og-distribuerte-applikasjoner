@@ -75,6 +75,10 @@ public class GalleryActivity extends AppCompatActivity {
         saveImages();
     }
 
+    private void removeImage() {
+
+    }
+
     private void sorterBilder() {
         boolean isSorted = true;
         for (int i = 0; i < bilder.size() - 1; i++) {
@@ -185,12 +189,11 @@ public class GalleryActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) { // Camera
                 leggVedNavnPaaBildeSomBlirTatt(bildeUri);
-            } else if (requestCode == 2) { // Gallery
-                if (data != null) {
+            } else if (requestCode == 2 && data != null) {
                     Uri selectedImageUri = data.getData(); // Henter URI til valgt bilde
                     leggVedNavnPaaBildeSomBlirTatt(selectedImageUri);
                 }
-            }
+
         }
     }
     private void leggVedNavnPaaBildeSomBlirTatt(Uri bildeUri) {
