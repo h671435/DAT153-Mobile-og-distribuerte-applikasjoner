@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.io.File;
 import java.util.HashMap;
+import java.util.stream.IntStream;
 
 import android.os.Environment;
 import android.widget.EditText;
@@ -63,11 +64,25 @@ public class GalleryActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Sorter listen
         findViewById(R.id.button_sort).setOnClickListener(v -> {
-            // Sorter bilder
-            bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
+            boolean isSorted = true;
+            for (int i = 0; i < bilder.size() - 1; i++) {
+                if (bilder.get(i).getNavn().compareTo(bilder.get(i + 1).getNavn()) > 0) {
+                    isSorted = false;
+                    break;
+                }
+            }
+
+            if (isSorted) {
+                bilder.sort((b1, b2) -> b2.getNavn().compareTo(b1.getNavn()));
+            } else {
+                bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
+            }
+
             adapter.notifyItemRangeChanged(0, bilder.size());
         });
+
 
         findViewById(R.id.button_add_image).setOnClickListener(addImage());
     }
@@ -100,7 +115,8 @@ public class GalleryActivity extends AppCompatActivity {
         String savedImagesJson = sharedPreferences.getString("bildeURIer", null);
 
         if (savedImagesJson != null) {
-            ArrayList<HashMap<String, String>> bildeURIer = new Gson().fromJson(savedImagesJson, new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType());
+            ArrayList<HashMap<String, String>> bildeURIer = new Gson().fromJson(savedImagesJson, new TypeToken<ArrayList<HashMap<String, String>>>() {
+            }.getType());
 
             if (bildeURIer != null) {
                 for (HashMap<String, String> bildeData : bildeURIer) {
@@ -112,8 +128,6 @@ public class GalleryActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     private void setUpGalleryBilder() {
         bilder.add(new GalleryBilde(getResourceUri(R.drawable.katt), "Katt"));
@@ -170,8 +184,8 @@ public class GalleryActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == 1) {
-                leggVedNavnPaaBildeSomBlirTatt(bildeUri);
-            }
+            leggVedNavnPaaBildeSomBlirTatt(bildeUri);
+        }
 
     }
 
