@@ -1,5 +1,6 @@
 package no.dat153.thequizapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
     Context context;
@@ -62,6 +62,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             textView = itemView.findViewById(R.id.textView);
+
+            // Sletting av bilde
+            itemView.setOnLongClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                builder.setTitle("Slett bilde")
+                        .setMessage("Er du sikker på at du vil slette dette bildet?")
+                        .setNegativeButton("Ja", (dialog, which) -> {
+                            ((GalleryActivity) itemView.getContext()).removeImage(getAdapterPosition());
+                        })
+                        .setPositiveButton("Nei", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return true;
+            });
         }
     }
 }

@@ -75,8 +75,12 @@ public class GalleryActivity extends AppCompatActivity {
         saveImages();
     }
 
-    private void removeImage() {
-
+    void removeImage(int position) {
+        if (position >= 0 && position < bilder.size()) {
+            bilder.remove(position);
+            adapter.notifyItemRemoved(position);
+            saveImages();
+        }
     }
 
     private void sorterBilder() {
@@ -105,7 +109,7 @@ public class GalleryActivity extends AppCompatActivity {
         for (GalleryBilde bilde : bilder) {
             HashMap<String, String> bildeData = new HashMap<>();
             bildeData.put("uri", bilde.getBildeUri().toString());
-            bildeData.put("navn", bilde.getNavn().toString());
+            bildeData.put("navn", bilde.getNavn());
             bildeURIer.add(bildeData);
         }
 
@@ -130,6 +134,7 @@ public class GalleryActivity extends AppCompatActivity {
                 }
             }
         }
+
     }
 
     private void setUpGalleryBilder() {
