@@ -36,7 +36,6 @@ import com.google.gson.reflect.TypeToken;
 
 public class GalleryActivity extends AppCompatActivity {
 
-    ArrayList<GalleryBilde> bilder = new ArrayList<>();
     private Uri bildeUri;
 
     private GalleryAdapter adapter;
@@ -56,11 +55,11 @@ public class GalleryActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.min_recycler_view);
 
         loadSavedImages();
-        if (bilder.isEmpty()) {
+        if (QuizApp.getInstance().getBilder().isEmpty()) {
             setUpGalleryBilder();
         }
 
-        adapter = new GalleryAdapter(this, bilder);
+        adapter = new GalleryAdapter(this, QuizApp.getInstance().getBilder());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -76,8 +75,8 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     void removeImage(int position) {
-        if (position >= 0 && position < bilder.size()) {
-            bilder.remove(position);
+        if (position >= 0 && position < QuizApp.getInstance().getBilder().size()) {
+            QuizApp.getInstance().getBilder().remove(position);
             adapter.notifyItemRemoved(position);
             saveImages();
         }
@@ -85,20 +84,20 @@ public class GalleryActivity extends AppCompatActivity {
 
     private void sorterBilder() {
         boolean isSorted = true;
-        for (int i = 0; i < bilder.size() - 1; i++) {
-            if (bilder.get(i).getNavn().compareTo(bilder.get(i + 1).getNavn()) > 0) {
+        for (int i = 0; i < QuizApp.getInstance().getBilder().size() - 1; i++) {
+            if (QuizApp.getInstance().getBilder().get(i).getNavn().compareTo(QuizApp.getInstance().getBilder().get(i + 1).getNavn()) > 0) {
                 isSorted = false;
                 break;
             }
         }
 
         if (isSorted) {
-            bilder.sort((b1, b2) -> b2.getNavn().compareTo(b1.getNavn()));
+            QuizApp.getInstance().getBilder().sort((b1, b2) -> b2.getNavn().compareTo(b1.getNavn()));
         } else {
-            bilder.sort(Comparator.comparing(GalleryBilde::getNavn));
+            QuizApp.getInstance().getBilder().sort(Comparator.comparing(GalleryBilde::getNavn));
         }
 
-        adapter.notifyItemRangeChanged(0, bilder.size());
+        adapter.notifyItemRangeChanged(0, QuizApp.getInstance().getBilder().size());
     }
 
     private void saveImages() {
@@ -106,7 +105,7 @@ public class GalleryActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         ArrayList<HashMap<String, String>> bildeURIer = new ArrayList<>();
-        for (GalleryBilde bilde : bilder) {
+        for (GalleryBilde bilde : QuizApp.getInstance().getBilder()) {
             HashMap<String, String> bildeData = new HashMap<>();
             bildeData.put("uri", bilde.getBildeUri().toString());
             bildeData.put("navn", bilde.getNavn());
@@ -130,7 +129,7 @@ public class GalleryActivity extends AppCompatActivity {
                     String uriString = bildeData.get("uri");
                     String navn = bildeData.get("navn");
 
-                    bilder.add(new GalleryBilde(Uri.parse(uriString), navn));
+                    QuizApp.getInstance().getBilder().add(new GalleryBilde(Uri.parse(uriString), navn));
                 }
             }
         }
@@ -138,9 +137,9 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     private void setUpGalleryBilder() {
-        bilder.add(new GalleryBilde(getResourceUri(R.drawable.katt), "Katt"));
-        bilder.add(new GalleryBilde(getResourceUri(R.drawable.hund), "Hund"));
-        bilder.add(new GalleryBilde(getResourceUri(R.drawable.snow_leopard), "Snø-Hest"));
+        QuizApp.getInstance().getBilder().add(new GalleryBilde(getResourceUri(R.drawable.katt), "Katt"));
+        QuizApp.getInstance().getBilder().add(new GalleryBilde(getResourceUri(R.drawable.hund), "Hund"));
+        QuizApp.getInstance().getBilder().add(new GalleryBilde(getResourceUri(R.drawable.snow_leopard), "Snø-Hest"));
     }
 
     // Hjelpemetode for å konvertere R.drawable til Uri
@@ -195,12 +194,13 @@ public class GalleryActivity extends AppCompatActivity {
             if (requestCode == 1) { // Camera
                 leggVedNavnPaaBildeSomBlirTatt(bildeUri);
             } else if (requestCode == 2 && data != null) {
-                    Uri selectedImageUri = data.getData(); // Henter URI til valgt bilde
-                    leggVedNavnPaaBildeSomBlirTatt(selectedImageUri);
-                }
+                Uri selectedImageUri = data.getData(); // Henter URI til valgt bilde
+                leggVedNavnPaaBildeSomBlirTatt(selectedImageUri);
+            }
 
         }
     }
+
     private void leggVedNavnPaaBildeSomBlirTatt(Uri bildeUri) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Skriv inn hva du har tatt bilde av");
@@ -212,8 +212,9 @@ public class GalleryActivity extends AppCompatActivity {
         builder.setPositiveButton("Ok", (dialog, which) -> {
             String bildeNavn = input.getText().toString();
             if (!bildeNavn.isEmpty()) {
-                bilder.add(new GalleryBilde(bildeUri, bildeNavn));
-                adapter.notifyItemInserted(bilder.size() - 1);
+                GalleryBilde bilde = new GalleryBilde(bildeUri, bildeNavn);
+                QuizApp.getInstance().getBilder().add(bilde);
+                adapter.notifyItemInserted( QuizApp.getInstance().getBilder().size() - 1);
             }
         });
 
