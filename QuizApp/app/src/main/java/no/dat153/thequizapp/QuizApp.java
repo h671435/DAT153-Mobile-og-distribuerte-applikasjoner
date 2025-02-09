@@ -22,14 +22,4 @@ public class QuizApp extends Application {
     public ArrayList<GalleryBilde> getBilder() {
         return bilder;
     }
-
-    public void addBilde(GalleryBilde bilde) {
-        bilder.add(bilde);
-    }
-
-    public void removeBilde(int position) {
-        if (position > 0 && position < bilder.size()) {
-            bilder.remove(position);
-        }
-    }
 }
