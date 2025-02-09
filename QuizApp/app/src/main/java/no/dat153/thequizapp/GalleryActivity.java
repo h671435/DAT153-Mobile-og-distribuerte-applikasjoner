@@ -11,6 +11,8 @@ import android.text.InputType;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -157,10 +159,14 @@ public class GalleryActivity extends AppCompatActivity {
             if (requestCode == 1) { // Camera
                 leggVedNavnPaaBildeSomBlirTatt(bildeUri);
             } else if (requestCode == 2 && data != null) {
-                Uri selectedImageUri = data.getData(); // Henter URI til valgt bilde
+                Uri selectedImageUri = data.getData();
+
+                // Ensure we have permissions for persistent access
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+
                 leggVedNavnPaaBildeSomBlirTatt(selectedImageUri);
             }
-
         }
     }
 
@@ -177,7 +183,7 @@ public class GalleryActivity extends AppCompatActivity {
             if (!bildeNavn.isEmpty()) {
                 GalleryBilde bilde = new GalleryBilde(bildeUri, bildeNavn);
                 QuizApp.getInstance().getBilder().add(bilde);
-                adapter.notifyItemInserted( QuizApp.getInstance().getBilder().size() - 1);
+                adapter.notifyItemInserted(QuizApp.getInstance().getBilder().size() - 1);
             }
         });
 
@@ -186,7 +192,9 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     private void openBilder() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, 2);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, 2);
     }
 }

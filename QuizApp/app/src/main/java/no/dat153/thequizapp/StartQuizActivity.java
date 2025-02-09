@@ -67,13 +67,18 @@ public class StartQuizActivity extends AppCompatActivity {
             clickedButton.setBackgroundColor(Color.GREEN);
         } else {
             clickedButton.setBackgroundColor(Color.RED);
+            if (buttonA.getText().toString().equals(currentBilde.getNavn())) {
+                buttonA.setBackgroundColor(Color.GREEN);
+            } else if (buttonB.getText().toString().equals(currentBilde.getNavn())) {
+                buttonB.setBackgroundColor(Color.GREEN);
+            } else if (buttonC.getText().toString().equals(currentBilde.getNavn())) {
+                buttonC.setBackgroundColor(Color.GREEN);
+            }
         }
 
-        // Set the background color of the other buttons to red
-        if (buttonA != clickedButton) buttonA.setBackgroundColor(Color.RED);
-        if (buttonB != clickedButton) buttonB.setBackgroundColor(Color.RED);
-        if (buttonC != clickedButton) buttonC.setBackgroundColor(Color.RED);
-
+        if (buttonA != clickedButton && !buttonA.getText().toString().equals(currentBilde.getNavn())) buttonA.setBackgroundColor(Color.RED);
+        if (buttonB != clickedButton && !buttonB.getText().toString().equals(currentBilde.getNavn())) buttonB.setBackgroundColor(Color.RED);
+        if (buttonC != clickedButton && !buttonC.getText().toString().equals(currentBilde.getNavn())) buttonC.setBackgroundColor(Color.RED);
 
         updateCounter();
         // Noe magi som gjør at koden venter et sekund
@@ -102,12 +107,12 @@ public class StartQuizActivity extends AppCompatActivity {
 
         brukteBilder.add(randomBilde);
 
-        // Set the correct answer
+        // Sett riktig svar
         currentBilde = QuizApp.getInstance().getBilder().get(randomBilde);
         imageView.setImageURI(currentBilde.getBildeUri());
         String correctAnswer = currentBilde.getNavn();
 
-        // Pick two incorrect answers
+        // Velger to forskjelle feile svar
         Set<String> wrongAnswers = new HashSet<>();
         while (wrongAnswers.size() < 2) {
             int randomIndex = random.nextInt(QuizApp.getInstance().getBilder().size());
@@ -117,14 +122,13 @@ public class StartQuizActivity extends AppCompatActivity {
             }
         }
 
-        // Combine correct and incorrect answers
+        // Kombiner riktig og fei lsvar
         ArrayList<String> choices = new ArrayList<>(wrongAnswers);
         choices.add(correctAnswer);
 
-        // Shuffle the choices so the correct answer isn't always in the same position
+        // Shuffle svvar
         Collections.shuffle(choices);
 
-        // Assign the choices to buttons
         buttonA.setText(choices.get(0));
         buttonB.setText(choices.get(1));
         buttonC.setText(choices.get(2));
@@ -134,11 +138,6 @@ public class StartQuizActivity extends AppCompatActivity {
         buttonA.setBackgroundColor(Color.parseColor("#5A4B98"));
         buttonB.setBackgroundColor(Color.parseColor("#5A4B98"));
         buttonC.setBackgroundColor(Color.parseColor("#5A4B98"));
-    }
-
-
-    private void oppdaterText() {
-
     }
 
     private void updateCounter() {
