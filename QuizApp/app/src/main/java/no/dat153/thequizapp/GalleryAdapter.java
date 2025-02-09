@@ -60,7 +60,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         TextView textView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.quizBilde);
             textView = itemView.findViewById(R.id.textView);
 
             // Sletting av bilde
@@ -68,9 +68,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
                 builder.setTitle("Slett bilde")
                         .setMessage("Er du sikker på at du vil slette dette bildet?")
-                        .setNegativeButton("Ja", (dialog, which) -> {
-                            ((GalleryActivity) itemView.getContext()).removeImage(getAdapterPosition());
-                        })
+                        .setNegativeButton("Ja", (dialog, which) -> ((GalleryActivity) itemView.getContext()).removeImage(getAdapterPosition()))
                         .setPositiveButton("Nei", (dialog, which) -> dialog.dismiss())
                         .show();
                 return true;

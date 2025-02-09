@@ -2,46 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".StartQuizActivity">
+    android:layout_height="wrap_content">
 
-
-    <TextView
-        android:id="@+id/gallery_headline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="@string/quiz_overskrift"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/counterText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="13dp"
-        android:text="0/0"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Quiz Image & Buttons -->
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/gallery_headline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp">
 
@@ -55,12 +25,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
-                android:contentDescription="Bilde"
                 android:scaleType="centerCrop"
+                android:contentDescription="Bilde"
                 app:layout_constraintDimensionRatio="16:9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/kangaroo" />
 
@@ -68,8 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/quizBilde">
 
@@ -77,28 +46,27 @@
                     android:id="@+id/answer_A"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_weight="1"
+                    android:layout_margin="8dp"
                     android:text="Option A" />
 
                 <Button
                     android:id="@+id/answer_B"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_weight="1"
+                    android:layout_margin="8dp"
                     android:text="Option B" />
 
                 <Button
                     android:id="@+id/answer_C"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_weight="1"
+                    android:layout_margin="8dp"
                     android:text="Option C" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
