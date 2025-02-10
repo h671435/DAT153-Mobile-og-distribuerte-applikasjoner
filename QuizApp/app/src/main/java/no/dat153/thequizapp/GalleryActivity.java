@@ -1,18 +1,17 @@
 package no.dat153.thequizapp;
 
-import
-        android.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -21,18 +20,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.io.File;
 import java.util.HashMap;
-
-import android.os.Environment;
-import android.widget.EditText;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class GalleryActivity extends AppCompatActivity {
 
@@ -112,18 +107,13 @@ public class GalleryActivity extends AppCompatActivity {
         editor.apply();
     }
 
-
     private View.OnClickListener addImage() {
         return v -> visBildeValgDialog();
     }
 
     private void visBildeValgDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Velg bilde kamera eller bilde mobil")
-                .setMessage("Velg en handling")
-                .setPositiveButton("Ta et bilde", (dialog, which) -> openCamera())
-                .setNegativeButton("Velg fra galleri", (dialog, which) -> openBilder())
-                .setNeutralButton("Avbryt", (dialog, which) -> dialog.dismiss());
+        builder.setTitle("Velg bilde kamera eller bilde mobil").setMessage("Velg en handling").setPositiveButton("Ta et bilde", (dialog, which) -> openCamera()).setNegativeButton("Velg fra galleri", (dialog, which) -> openBilder()).setNeutralButton("Avbryt", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

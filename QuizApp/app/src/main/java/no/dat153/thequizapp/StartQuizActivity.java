@@ -1,7 +1,6 @@
 package no.dat153.thequizapp;
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -76,9 +75,12 @@ public class StartQuizActivity extends AppCompatActivity {
             }
         }
 
-        if (buttonA != clickedButton && !buttonA.getText().toString().equals(currentBilde.getNavn())) buttonA.setBackgroundColor(Color.RED);
-        if (buttonB != clickedButton && !buttonB.getText().toString().equals(currentBilde.getNavn())) buttonB.setBackgroundColor(Color.RED);
-        if (buttonC != clickedButton && !buttonC.getText().toString().equals(currentBilde.getNavn())) buttonC.setBackgroundColor(Color.RED);
+        if (buttonA != clickedButton && !buttonA.getText().toString().equals(currentBilde.getNavn()))
+            buttonA.setBackgroundColor(Color.RED);
+        if (buttonB != clickedButton && !buttonB.getText().toString().equals(currentBilde.getNavn()))
+            buttonB.setBackgroundColor(Color.RED);
+        if (buttonC != clickedButton && !buttonC.getText().toString().equals(currentBilde.getNavn()))
+            buttonC.setBackgroundColor(Color.RED);
 
         updateCounter();
         // Noe magi som gjør at koden venter et sekund
