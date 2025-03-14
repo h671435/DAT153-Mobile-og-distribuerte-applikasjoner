@@ -27,6 +27,10 @@ public class ItemRepository {
         return allItems;
     }
 
+    public void deleteAllItems() {
+        executorService.execute(itemDao::deleteAllItems);
+    }
+
     public void insert(Item item) {
         executorService.execute(() -> itemDao.insertItem(item));
     }

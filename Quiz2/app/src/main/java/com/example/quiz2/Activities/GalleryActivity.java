@@ -8,6 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +19,10 @@ import com.example.quiz2.Database.ItemRoomDatabase;
 import com.example.quiz2.Entity.Item;
 import com.example.quiz2.R;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.random.AbstractPlatformRandom;
 
 public class GalleryActivity extends AppCompatActivity {
     private GalleryAdapter adapter;
@@ -37,15 +41,14 @@ public class GalleryActivity extends AppCompatActivity {
         });
 
         // Initialize the repository
-        ItemRepository repository = new ItemRepository(getApplication());
+        ItemRepository repo = new ItemRepository(getApplication());
 
-        // Fetch the list of items from the repository
-        LiveData<List<Item>> items = repository.getAllItems();
-
-
-        adapter = new GalleryAdapter(this, items.getValue());
+        //
+        adapter = new GalleryAdapter(this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
+        // Observer
+        repo.getAllItems().observe(this, items -> adapter.setItems(items));
     }
 }

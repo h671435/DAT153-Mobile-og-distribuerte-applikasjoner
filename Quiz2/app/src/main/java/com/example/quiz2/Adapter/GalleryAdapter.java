@@ -32,8 +32,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout, altså lage et view av layouten
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_gallery, parent, false);
+        // Inflate the layout, altså lage et view av layouten som brukes i hver rad
+        View view = LayoutInflater.from(context).inflate(R.layout.itemview, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -48,7 +48,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         Glide.with(context)
                 .load(bildeUri)
                 .into(holder.imageView);
-
     }
 
     @Override
@@ -56,11 +55,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         return items.size();
     }
 
+    public void setItems(List<Item> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+            textView = itemView.findViewById(R.id.imageText);
         }
     }
 }

@@ -46,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         repo = new ItemRepository(getApplication());
         Uri imageUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.snoe_hest);
-        Item startItem = new Item("Start Image", imageUri.toString());
+        Item startItem = new Item("Snoe-hest", imageUri.toString());
         repo.insert(startItem);
-
-
     }
 }
