@@ -13,9 +13,9 @@ import com.example.quiz2.Entity.Item;
 public abstract class ItemRoomDatabase extends RoomDatabase {
     public abstract ItemDao itemDao();
 
-    private static ItemRoomDatabase INSTANCE;
+    private static volatile ItemRoomDatabase INSTANCE;
 
-    static ItemRoomDatabase getDatabase(final Context context) {
+    public static ItemRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (ItemRoomDatabase.class) {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(), ItemRoomDatabase.class, "item_database").build();
