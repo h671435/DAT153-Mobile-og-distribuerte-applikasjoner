@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/images" />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <!-- Semi-transparent overlay -->
     <View
@@ -28,17 +28,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
         android:layout_marginBottom="277dp"
-        android:text="Sigma Quiz 👿👿"
-        android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        android:textStyle="bold"
         android:shadowColor="#80000000"
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="4"
+        android:text="Velkommin til min Quizzi"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,17 +55,17 @@
 
         <Button
             android:id="@+id/galleryBtn"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="openGallery"
-            android:text="Visit The Gallery!"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="12sp"
             android:backgroundTint="#1976D2"
             android:elevation="6dp"
-            style="@style/Widget.MaterialComponents.Button" />
+            android:onClick="openGallery"
+            android:text="Munch museet denne veien"
+            android:textColor="#FFFFFF"
+            android:textSize="9dp"
+            android:textStyle="bold" />
 
         <Space
             android:layout_width="16dp"
@@ -74,15 +73,15 @@
 
         <Button
             android:id="@+id/quizBtn"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="startQuiz"
-            android:text="Start The Mf Quiz"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
             android:backgroundTint="#388E3C"
             android:elevation="6dp"
-            style="@style/Widget.MaterialComponents.Button" />
+            android:onClick="startQuiz"
+            android:text="Start quizzen då"
+            android:textColor="#FFFFFF"
+            android:textSize="9dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
