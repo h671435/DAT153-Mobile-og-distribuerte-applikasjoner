@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,7 @@ import com.ebookfrenzy.quizappeksamen.Adapter.GalleryAdapter;
 import com.ebookfrenzy.quizappeksamen.Database.QuizItem;
 import com.ebookfrenzy.quizappeksamen.Database.QuizItemDAO;
 import com.ebookfrenzy.quizappeksamen.Database.QuizItemDatabase;
+import com.ebookfrenzy.quizappeksamen.ViewModel.QuizItemViewModel;
 import com.ebookfrenzy.quizappeksamen.databinding.ActivityGalleryBinding;
 
 import java.io.File;
@@ -53,7 +55,7 @@ public class GalleryActivity extends AppCompatActivity {
             Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show();
         }
     });
-
+    private QuizItemViewModel quizViewModel;
     private ActivityGalleryBinding binding;
     private Uri bildeUri;
     private QuizItemDatabase db;
@@ -77,11 +79,14 @@ public class GalleryActivity extends AppCompatActivity {
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null) {
                 bildeUri = uri;
+                getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 saveImageToDb(uri);
             } else {
                 Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        quizViewModel = new ViewModelProvider(this).get(QuizItemViewModel.class);
 
         // Inflater layouten via binding
         binding = ActivityGalleryBinding.inflate(getLayoutInflater());
@@ -106,12 +111,7 @@ public class GalleryActivity extends AppCompatActivity {
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down)
         );
 
-        // Room-database
-        db = QuizItemDatabase.getDatabase(this);
-        dao = db.quizItemDAO();
-
-        // Observer oppdateringer fra databasen
-        dao.getAll().observe(this, items -> {
+        quizViewModel.getAllQuizItems().observe(this, items -> {
             quizItems.clear();
             quizItems.addAll(items);
             adapter.notifyDataSetChanged();
@@ -224,21 +224,15 @@ public class GalleryActivity extends AppCompatActivity {
                 .setPositiveButton("Save", (dialogInterface, i) -> {
                     String imageName = input.getText().toString().trim();
                     if (!imageName.isEmpty()) {
-                        // Create and save the QuizItem
+                        // Create and save the QuizItem using ViewModel
                         QuizItem newItem = new QuizItem(bildeUri.toString(), imageName);
-                        new Thread(() -> {
-                            dao.insert(newItem);
-                            runOnUiThread(() -> Toast.makeText(GalleryActivity.this, "Image saved", Toast.LENGTH_SHORT).show());
-                        }).start();
-
+                        quizViewModel.insert(newItem);
+                        Toast.makeText(GalleryActivity.this, "Image saved", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(GalleryActivity.this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Cancel", (dialogInterface, i) -> {
-                    dialogInterface.cancel();
-                    Toast.makeText(GalleryActivity.this, "Image not saved", Toast.LENGTH_SHORT).show();
-                })
+                .setNegativeButton("Cancel", null)
                 .create();
 
         dialog.show();

@@ -4,9 +4,10 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
-
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizAppEksamen"
         tools:targetApi="31">
-
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false"
+            android:theme="@style/Theme.QuizAppEksamen" />
         <activity
             android:name=".QuizActivity"
             android:exported="false" />
@@ -34,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -44,4 +49,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
+
 </manifest>
